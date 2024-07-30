@@ -11,10 +11,10 @@ import {
 } from "@livekit/components-react";
 import "@livekit/components-styles";
 import { Track } from "livekit-client";
-import { useEffect, useState } from "react";
+import { useEffect, useState, Suspense } from "react";
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export default function Page() {
+function RoomContent() {
   const searchParams = useSearchParams();
   const room = searchParams.get('room') || "default-room";
   const name = searchParams.get('username') || "anonymous-user";
@@ -60,6 +60,17 @@ export default function Page() {
       <RoomAudioRenderer />
       <ControlBar />
     </LiveKitRoom>
+  );
+}
+
+export default function Page() {
+  return (
+    <Suspense fallback={<div className="flex w-full h-[62vh] justify-center items-center gap-2">
+      <SpinnerIcon className="animate-spin text-4xl" fontSize={250} />
+      <p>Loading...</p>
+    </div>}>
+      <RoomContent />
+    </Suspense>
   );
 }
 
