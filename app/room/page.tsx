@@ -12,13 +12,14 @@ import {
 import "@livekit/components-styles";
 import { Track } from "livekit-client";
 import { useEffect, useState, Suspense } from "react";
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 function RoomContent() {
   const searchParams = useSearchParams();
   const room = searchParams.get('room') || "default-room";
-  const name = searchParams.get('username') || "anonymous-user";
+  const name = searchParams.get('username') || `anonymous-user-${Math.floor(Math.random() * 4000) + 1}`;
   const [token, setToken] = useState("");
+  const router = useRouter();
 
   useEffect(() => {
     (async () => {
@@ -36,9 +37,9 @@ function RoomContent() {
 
   if (token === "") {
     return <div className="flex w-full h-[62vh] justify-center items-center gap-2">
-        <SpinnerIcon className="animate-spin text-4xl" fontSize={250} />
-        <p>Joining the room...</p>
-        </div>;
+      <SpinnerIcon className="animate-spin text-4xl" fontSize={250} />
+      <p>Joining the room...</p>
+    </div>;
   }
 
   return (
@@ -49,6 +50,7 @@ function RoomContent() {
       serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL}
       data-lk-theme='default'
       style={{ height: '90dvh' }}
+      onDisconnected={() => router.push('/')}
     >
       <MyVideoConference />
       <RoomAudioRenderer />
