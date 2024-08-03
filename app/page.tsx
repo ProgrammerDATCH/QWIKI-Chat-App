@@ -39,7 +39,7 @@ export default function Home() {
 
           <div>
             <Link 
-              href={`/room?room=${roomName}&username=${username}`}
+              href={`/room/${roomName || "default-room"}/username/${username}`}
               className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm sm:text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-300"
             >
               START VIDEO CALL

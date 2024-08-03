@@ -19,9 +19,12 @@ const Navbar = () => {
             </Link>
             
           </div>
-          <div>
+          <div className='flex gap-5'>
             <Link href="/" className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium">
               Start New Chat
+            </Link>
+            <Link href="/admin" className="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium">
+              ADMIN
             </Link>
           </div>
         </div>
