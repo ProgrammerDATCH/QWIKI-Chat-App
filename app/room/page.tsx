@@ -17,7 +17,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 function RoomContent() {
   const searchParams = useSearchParams();
   const room = searchParams.get('room') || "default-room";
-  const name = searchParams.get('username') || `anonymous-user-${Math.floor(Math.random() * 4000) + 1}`;
+  const name = searchParams.get('username') || `anonymous-user`;
   const [token, setToken] = useState("");
   const router = useRouter();
 

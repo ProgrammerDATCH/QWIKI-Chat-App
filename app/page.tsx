@@ -4,7 +4,7 @@ import { useState } from 'react';
 
 export default function Home() {
   const [roomName, setRoomName] = useState('');
-  const [username, setUsername] = useState('');
+  const [username, setUsername] = useState(`anonymous-user-${Math.floor(Math.random() * 4000) + 1}`);
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center p-4 sm:p-8 md:p-16 lg:p-24 bg-gray-900 text-white">
