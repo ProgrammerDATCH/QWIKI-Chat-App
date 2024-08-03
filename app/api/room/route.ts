@@ -5,11 +5,10 @@ export async function GET() {
     try {
         const messages = await prisma.message.findMany();
         const rooms = Array.from(new Set(messages.map(m => m.room)))
-        const response = NextResponse.json({ message: "All rooms", data: rooms }, { status: 200 });
-        response.headers.set('Cache-Control', 'no-store');
-
-        return response;    }
+        return NextResponse.json({ message: "All rooms", data: rooms }, { status: 200 })
+    }
     catch (error: any) {
         return NextResponse.json({ message: error.message || "Failed to get rooms" }, { status: 500 })
     }
 }
+export const revalidate = 0;
