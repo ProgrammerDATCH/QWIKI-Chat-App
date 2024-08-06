@@ -8,7 +8,7 @@ export async function GET() {
         return NextResponse.json({ message: "All rooms", data: rooms }, { status: 200 })
     }
     catch (error: any) {
-        return NextResponse.json({ message: error.message || "Failed to get rooms" }, { status: 500 })
+        return NextReseponse.json({ message: error.message || "Failed to get rooms" }, { status: 500 })
     }
 }
 export const revalidate = 0;

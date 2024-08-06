@@ -5,7 +5,6 @@ import {
   LiveKitRoom,
   SpinnerIcon,
   VideoConference,
-  useParticipants,
   useChat,
 } from "@livekit/components-react";
 
@@ -18,6 +17,7 @@ import { IMessage } from "@/lib/utils";
 export default function RoomContent() {
   const { roomId: room, username: name }: { roomId: string, username: string } = useParams();
   const [token, setToken] = useState("");
+  const [egressId, setEgressId] = useState("")
 
   useEffect(() => {
     (async () => {
@@ -34,6 +34,31 @@ export default function RoomContent() {
 
   }, []);
 
+  const startRecording = async () => {
+    try {
+      const res = await axios.post('/api/record', { room })
+      setEgressId(res.data.data)
+      alert("Success")
+      console.dir(res.data)
+    }
+    catch (error) {
+      alert("Error")
+      console.dir(error)
+    }
+  }
+
+  const stopRecording = async () => {
+    try {
+      const res = await axios.put('/api/record', { egressId })
+      alert("Success")
+      console.dir(res.data)
+    }
+    catch (error) {
+      alert("Error")
+      console.dir(error)
+    }
+  }
+
   if (token === "") {
     return <div className="flex w-full h-[62vh] justify-center items-center gap-2">
       <SpinnerIcon className="animate-spin text-4xl" fontSize={250} />
@@ -49,10 +74,18 @@ export default function RoomContent() {
       serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL}
       data-lk-theme='default'
       style={{ height: '90dvh' }}
+      className="relative"
     // onDisconnected={() => router.push('/')}
     >
       <VideoConference />
-      <ChatHandler owner={name} room={room} />
+
+      <div className="absolute left-2 bottom-2 flex gap-2 lk-button-group">
+        <button onClick={startRecording} className="lk-button">START</button>
+        <button onClick={stopRecording} className="lk-button">STOP</button>
+      </div>
+      
+      {/* <ChatHandler owner={name} room={room} /> */}
+      
     </LiveKitRoom>
   );
 }
@@ -89,11 +122,9 @@ function ChatHandler({ owner, room }: { owner: string, room: string }) {
 
   const handleAddMessage = async (newMessage: IMessage) => {
     try {
-      const createdMessage = await axios.post('/api/message', newMessage);
-      console.log("====>CREATED", createdMessage)
+      await axios.post('/api/message', newMessage);
     }
     catch (error) {
-      console.error("ERROR ====>")
       console.error(error)
     }
   }
