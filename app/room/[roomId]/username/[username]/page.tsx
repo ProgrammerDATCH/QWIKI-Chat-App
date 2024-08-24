@@ -75,7 +75,6 @@ export default function RoomContent() {
       data-lk-theme='default'
       style={{ height: '90dvh' }}
       className="relative"
-    // onDisconnected={() => router.push('/')}
     >
       <VideoConference />
 
@@ -83,8 +82,6 @@ export default function RoomContent() {
         <button onClick={startRecording} className="lk-button">START</button>
         <button onClick={stopRecording} className="lk-button">STOP</button>
       </div>
-      
-      {/* <ChatHandler owner={name} room={room} /> */}
       
     </LiveKitRoom>
   );

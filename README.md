@@ -1,36 +1,58 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Video Record:
 
-## Getting Started
+- Create config.yaml
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+``` bash
+nano ~/livekit-egress/config.yaml
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Contents: 
+``` javascript 
+log_level: debug
+api_key: devkey
+api_secret: secret
+ws_url: ws://172.17.0.1:7880
+insecure: true
+redis:
+  address: 172.17.0.1:6379
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
+- Download Image
 
-To learn more about Next.js, take a look at the following resources:
+``` bash
+ docker run --rm \
+  --cap-add SYS_ADMIN \
+  -e EGRESS_CONFIG_FILE=/out/config.yaml \
+  -v ~/livekit-egress:/out \
+  livekit/egress
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Install Redis:
+``` bash
+    sudo apt update
+    sudo apt install redis-server
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- Change Redis bind from `bind 127.0.0.1` to `bind 0.0.0.0` AND from `protected-mode yes` to `protected-mode no`
 
-## Deploy on Vercel
+```bash
+sudo nano /etc/redis/redis.conf
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Restart Redis
+```bash
+sudo systemctl restart redis-server
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- View IP to use in Docker || Mosly is `172.17.0.1:6379`. Then update config.yaml
+```bash
+ip addr show docker0 | grep inet
+```
+
+- Then run
+``` bash
+docker run --rm   --cap-add SYS_ADMIN   -e EGRESS_CONFIG_FILE=/out/config.yaml   -v ~/livekit-egress:/out   livekit/egress
++ rm -rf '/home/egress/tmp/*'
+```
